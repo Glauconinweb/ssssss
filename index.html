@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Protótipo - Criador de Treino Personalizado</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>J.A. Treinamentos Personalizados</h1>
+      <p>Plataforma Automatizada de Fichas</p>
+    </header>
+
+    <div class="container">
+      <div id="ficha-info">
+        <label for="aluno">Aluno:</label>
+        <input type="text" id="aluno" value="Nome do aluno" />
+        <label for="objetivo">Objetivo:</label>
+        <input type="text" id="objetivo" value="Hipertrofia - Avançado" />
+      </div>
+
+      <h2>Divisão de Treino (A/B/C)</h2>
+
+      <div class="tabs">
+        <button class="tab-button active" data-tab="tab-a">
+          Treino A (Superiores - Puxar)
+        </button>
+        <button class="tab-button" data-tab="tab-b">
+          Treino B (Inferiores)
+        </button>
+        <button class="tab-button" data-tab="tab-c">
+          Treino C (Superiores - Empurrar)
+        </button>
+      </div>
+
+      <div id="tab-a" class="tab-content active">
+        <h3>Treino A - Superiores</h3>
+        <div class="exercicios-lista"></div>
+        <button class="add-exercicio-btn" data-target="tab-a">
+          Adicionar Exercício
+        </button>
+      </div>
+
+      <div id="tab-b" class="tab-content">
+        <h3>Treino B - Inferiores</h3>
+        <div class="exercicios-lista"></div>
+        <button class="add-exercicio-btn" data-target="tab-b">
+          Adicionar Exercício
+        </button>
+      </div>
+
+      <div id="tab-c" class="tab-content">
+        <h3>Treino C - Outros</h3>
+        <div class="exercicios-lista"></div>
+        <button class="add-exercicio-btn" data-target="tab-c">
+          Adicionar Exercício
+        </button>
+      </div>
+
+      <button id="gerar-planilha-btn">
+        Gerar e Enviar Planilha (Simulação)
+      </button>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
