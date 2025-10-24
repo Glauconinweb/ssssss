@@ -33,7 +33,7 @@ header p {
 .container {
   max-width: 900px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 20px; /* Garante padding lateral em desktop */
 }
 
 h2 {
@@ -69,6 +69,7 @@ h2 {
 /* Abas (Tabs) */
 .tabs {
   display: flex;
+  flex-wrap: wrap; /* NOVIDADE: Permite que as abas quebrem a linha */
   margin-bottom: 20px;
 }
 
@@ -80,6 +81,7 @@ h2 {
   padding: 10px 15px;
   cursor: pointer;
   margin-right: 5px;
+  margin-bottom: 5px; /* NOVIDADE: Espaço entre abas quando quebram a linha */
   transition: background-color 0.3s;
 }
 
@@ -98,11 +100,11 @@ h2 {
   padding: 20px;
   border-radius: 0 8px 8px 8px;
   border: 1px solid var(--color-border);
-  display: none; /* Esconder por padrão */
+  display: none;
 }
 
 .tab-content.active {
-  display: block; /* Mostrar o conteúdo ativo */
+  display: block;
 }
 
 /* Estilo do Exercício (Formato de Ficha/Card) */
@@ -111,7 +113,8 @@ h2 {
   padding: 15px;
   margin-bottom: 15px;
   border-radius: 6px;
-  border-left: 5px solid var(--color-highlight); /* Destaque lateral */
+  border-left: 5px solid var(--color-highlight);
+  position: relative; /* Para posicionar o botão de remover */
 }
 
 .exercicio-item h4 {
@@ -160,8 +163,10 @@ h2 {
 .remover-exercicio-btn {
   background-color: #d9534f; /* Vermelho */
   color: var(--color-light);
-  float: right;
-  margin-top: -30px; /* Alinhar com o título do exercício */
+  position: absolute; /* Altera para Absolute */
+  top: 15px; /* NOVIDADE: Posicionamento mais fácil no card */
+  right: 15px;
+  margin-top: 0;
 }
 
 #gerar-planilha-btn {
@@ -171,4 +176,52 @@ h2 {
   color: var(--color-light);
   margin-top: 30px;
   margin-bottom: 50px;
+}
+
+/* =======================================================
+   MEDIA QUERIES - OTIMIZAÇÃO PARA TELAS PEQUENAS (MOBILE)
+   ======================================================= */
+@media (max-width: 600px) {
+  /* Container: Remove o padding extra e deixa usar toda a largura */
+  .container {
+    padding: 0 10px;
+  }
+
+  /* Informações do Aluno: Empilha os campos */
+  #ficha-info {
+    flex-direction: column; /* Faz com que os itens fiquem um abaixo do outro */
+    gap: 10px;
+  }
+
+  /* Garante que os rótulos e inputs de Ficha Info ocupem 100% da largura */
+  #ficha-info label,
+  #ficha-info input {
+    width: 100%;
+    box-sizing: border-box; /* Inclui padding e borda na largura total */
+  }
+
+  /* Abas: Garante que as abas ocupem a largura total e se empilhem se necessário */
+  .tabs {
+    flex-direction: column; /* Abas empilhadas para economizar espaço horizontal */
+  }
+
+  .tab-button {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+
+  /* Ajusta o posicionamento do botão remover para telas pequenas */
+  .remover-exercicio-btn {
+    position: static; /* Volta a ser estático dentro do fluxo */
+    display: block;
+    margin-top: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    float: none;
+  }
+
+  .exercicio-item h4 {
+    margin-right: 0; /* Remove a margem para o botão de remover se posicionar abaixo */
+  }
 }
