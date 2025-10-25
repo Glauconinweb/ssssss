@@ -20,6 +20,27 @@ body {
   line-height: 1.6;
 }
 
+/* AJUSTE para Forçar a Visualização de Todas as Abas no PDF */
+.tab-content {
+  /* Garante que o CSS normal de 'display: none' seja ignorado para as abas inativas
+       quando o JS as força a 'display: block' */
+  page-break-after: always; /* Cada treino em uma página separada (opcional) */
+}
+
+/* Remove botões e barras de rolagem que podem aparecer na impressão, mas não na tela */
+@media print {
+  #gerar-pdf-btn,
+  #gerar-planilha-btn,
+  .add-exercicio-btn,
+  .tabs {
+    display: none !important;
+  }
+
+  /* Garante que os containers não tenham cortes feios */
+  .exercicio-item {
+    page-break-inside: avoid;
+  }
+}
 /* Cabeçalho */
 header {
   background-color: var(--color-highlight);
