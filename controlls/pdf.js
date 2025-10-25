@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ----------------------------------------------------
   // 4. Lógica de Geração de PDF
   // ----------------------------------------------------
-  const gerarPdfBtn = document.getElementById("gerar-planilha-btn");
+  const gerarPdfBtn = document.getElementById("baixar-pdf-btn");
 
   gerarPdfBtn.addEventListener("click", () => {
     const element = document.getElementById("planilha-content");
