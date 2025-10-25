@@ -1,9 +1,17 @@
+// copie este arquivo para controlls/pdf.js
 document.addEventListener("DOMContentLoaded", () => {
   const gerarBtn = document.getElementById("gerar-planilha-btn");
+  if (!gerarBtn) return;
 
   gerarBtn.addEventListener("click", async () => {
     const conteudo = document.getElementById("planilha-content");
-    const aluno = document.getElementById("aluno")?.value || "Aluno";
+    if (!conteudo) {
+      alert("Conteúdo da planilha não encontrado.");
+      return;
+    }
+
+    const aluno =
+      (document.getElementById("aluno")?.value || "Aluno").trim() || "Aluno";
     const filename = `Ficha_${aluno}.pdf`;
 
     const opt = {
@@ -34,76 +42,76 @@ document.addEventListener("DOMContentLoaded", () => {
         /FBAN|FBAV|Instagram|Twitter|Line|WhatsApp|Snapchat/i.test(ua);
       const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
 
-      // 1) Tentar Web Share (mais amigável no mobile moderno)
+      // 1) Web Share API (mobile moderno)
       try {
         const file = new File([pdfBlob], filename, { type: "application/pdf" });
         if (navigator.canShare && navigator.canShare({ files: [file] })) {
           await navigator.share({
             files: [file],
             title: filename,
-            text: "Aqui está a ficha em PDF",
+            text: "Ficha em PDF",
           });
-          // revogar após um tempo para garantir que o compartilhamento terminou
           setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
           return;
         }
       } catch (e) {
-        // falhou no share — continuar com outros fallbacks
-        console.debug("Web Share não disponível ou falhou:", e);
+        console.debug("Web Share falhou ou indisponível:", e);
       }
 
-      // 2) Tentar abrir em nova aba (geralmente abre visualizador no mobile)
+      // 2) Abrir em nova aba (mais compatível mobile)
       const newWin = window.open(blobUrl, "_blank");
       if (newWin) {
-        // revogar depois para não invalidar enquanto a aba carrega
         setTimeout(() => {
           try {
             URL.revokeObjectURL(blobUrl);
-          } catch (err) {}
+          } catch (e) {}
         }, 15000);
         return;
       }
 
-      // 3) Criar <a target="_blank"> e clicar (sem download attribute)
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.target = "_blank";
-      // não setar link.download no mobile/iOS — causa problemas
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // 3) Criar <a target="_blank"> e clicar (sem download attribute no mobile)
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.target = "_blank";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
 
-      // Verifica se a aba foi aberta; se não, tentar navegar na mesma aba
-      // (no mobile alguns navegadores bloqueiam popups mas permitem navegação direta)
+      // 4) Se nada abriu, navegar para o blob na mesma aba (fallback agressivo)
       setTimeout(() => {
-        // 4) Navegar para o blob (fallback mais agressivo)
         try {
           window.location.href = blobUrl;
         } catch (e) {
-          console.debug("window.location href falhou:", e);
+          console.debug(e);
         }
 
-        // 5) Criar fallback visível se nada funcionar — link para o usuário tocar/segurar
+        // 5) Fallback visível: link para o usuário abrir/baixar manualmente
         const fallbackId = "pdf-fallback-link";
         if (!document.getElementById(fallbackId)) {
           const fallback = document.createElement("div");
           fallback.id = fallbackId;
-          fallback.style.position = "fixed";
-          fallback.style.left = "10px";
-          fallback.style.right = "10px";
-          fallback.style.bottom = "12px";
-          fallback.style.zIndex = 2147483647;
-          fallback.style.background = "#fff";
-          fallback.style.border = "1px solid #ccc";
-          fallback.style.padding = "10px";
-          fallback.style.boxShadow = "0 2px 8px rgba(0,0,0,0.2)";
-          fallback.style.borderRadius = "6px";
+          Object.assign(fallback.style, {
+            position: "fixed",
+            left: "10px",
+            right: "10px",
+            bottom: "12px",
+            zIndex: 2147483647,
+            background: "#fff",
+            border: "1px solid #ccc",
+            padding: "10px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+            borderRadius: "6px",
+            fontFamily: "sans-serif",
+            fontSize: "14px",
+          });
           fallback.innerHTML = `
-            <div style="font-size:14px; margin-bottom:8px;">
+            <div style="margin-bottom:8px;">
               Toque no link abaixo para abrir o PDF. Se estiver dentro de um app (WhatsApp/Instagram), escolha "Abrir no navegador".
             </div>
             <a href="${blobUrl}" target="_blank" style="color:#0066cc; word-break:break-all;">Abrir/baixar Ficha (${filename})</a>
-            <button id="fechar-fallback" style="margin-left:10px;">Fechar</button>
+            <div style="margin-top:8px; text-align:right;">
+              <button id="fechar-fallback" style="padding:4px 8px;">Fechar</button>
+            </div>
           `;
           document.body.appendChild(fallback);
           document
@@ -114,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 URL.revokeObjectURL(blobUrl);
               } catch (e) {}
             });
-          // remover o fallback automaticamente após 30s
+          // remover automaticamente após 30s
           setTimeout(() => {
             const el = document.getElementById(fallbackId);
             if (el) el.remove();

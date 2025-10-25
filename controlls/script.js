@@ -1,35 +1,30 @@
+// copie este arquivo para controlls/script.js (versão estável)
 document.addEventListener("DOMContentLoaded", () => {
-  // ---------------------------
-  // 1. Lógica de Abas
-  // ---------------------------
   const tabButtons = document.querySelectorAll(".tab-button");
   const tabContents = document.querySelectorAll(".tab-content");
 
   tabButtons.forEach((button) => {
     button.addEventListener("click", () => {
       const targetId = button.getAttribute("data-tab");
-
       tabButtons.forEach((btn) => btn.classList.remove("active"));
       tabContents.forEach((content) => {
         content.classList.remove("active");
         content.style.display = "none";
       });
-
       button.classList.add("active");
       const targetTab = document.getElementById(targetId);
-      targetTab.classList.add("active");
-      targetTab.style.display = "block";
+      if (targetTab) {
+        targetTab.classList.add("active");
+        targetTab.style.display = "block";
+      }
     });
   });
 
-  // ---------------------------
-  // 2. Adicionar / Remover Exercícios
-  // ---------------------------
   const addExercicioBtns = document.querySelectorAll(".add-exercicio-btn");
   const exercicioCounts = { "tab-a": 0, "tab-b": 0, "tab-c": 0 };
 
   const createExercicioHTML = (tabId) => {
-    exercicioCounts[tabId]++;
+    exercicioCounts[tabId] = (exercicioCounts[tabId] || 0) + 1;
     const count = exercicioCounts[tabId];
     const uniqueId = `${tabId}-ex-${count}`;
 
@@ -63,11 +58,12 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.addEventListener("click", (e) => {
       const tabId = e.target.getAttribute("data-target");
       const lista = document.querySelector(`#${tabId} .exercicios-lista`);
-      lista.insertAdjacentHTML("beforeend", createExercicioHTML(tabId));
+      if (lista)
+        lista.insertAdjacentHTML("beforeend", createExercicioHTML(tabId));
     });
   });
 
-  document.querySelector(".container").addEventListener("click", (e) => {
+  document.querySelector(".container")?.addEventListener("click", (e) => {
     if (e.target.classList.contains("remover-exercicio-btn")) {
       const uniqueId = e.target.getAttribute("data-id");
       const item = document.querySelector(`[data-unique-id="${uniqueId}"]`);
@@ -75,10 +71,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Exibe a primeira aba ao carregar
   const firstTab = document.querySelector(".tab-button.active");
   if (firstTab) {
     const initialTab = firstTab.getAttribute("data-tab");
-    document.getElementById(initialTab).style.display = "block";
+    const el = document.getElementById(initialTab);
+    if (el) el.style.display = "block";
   }
 });
