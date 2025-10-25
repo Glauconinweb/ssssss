@@ -12,10 +12,12 @@ document.addEventListener("DOMContentLoaded", () => {
       // Desativa todos
       tabButtons.forEach((btn) => btn.classList.remove("active"));
       tabContents.forEach((content) => content.classList.remove("active"));
+      tabContents.forEach((content) => (content.style.display = "none")); // Garante que apenas o ativo apareça
 
       // Ativa o botão e o conteúdo correspondente
       button.classList.add("active");
       document.getElementById(targetId).classList.add("active");
+      document.getElementById(targetId).style.display = "block"; // NOVO: Garante que o display seja ativado
     });
   });
 
@@ -23,14 +25,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // 2. Lógica de Adicionar/Remover Exercícios
   // ----------------------------------------------------
   const addExercicioBtns = document.querySelectorAll(".add-exercicio-btn");
-  // Objeto para manter a contagem de exercícios por aba (Treino A, B, C, etc.)
   const exercicioCounts = {
     "tab-a": 0,
     "tab-b": 0,
     "tab-c": 0,
   };
 
-  // Função para criar o HTML de um exercício
   const createExercicioHTML = (tabId) => {
     exercicioCounts[tabId]++;
     const count = exercicioCounts[tabId];
@@ -71,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Lógica de Remover (Delegando o evento ao container principal)
   document.querySelector(".container").addEventListener("click", (e) => {
     if (e.target.classList.contains("remover-exercicio-btn")) {
       const uniqueId = e.target.getAttribute("data-id");
@@ -84,15 +83,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // ----------------------------------------------------
-  // 3. Simulação de Envio
-  // ----------------------------------------------------
-  document
-    .getElementById("gerar-planilha-btn")
-    .addEventListener("click", () => {
-      const aluno = document.getElementById("aluno").value;
-      alert(
-        `Planilha de Treino de ${aluno} Gerada com Sucesso!\n\nIremos simular o envio direto para o aluno ou download em PDF/Ficha de Avaliação. Você não precisa mais se preocupar com planilhas manuais!`
-      );
-    });
+  // Garante que a primeira aba esteja ativa no carregamento (mitigação para mobile)
+  const initialTab = document
+    .querySelector(".tab-button.active")
+    .getAttribute("data-tab");
+  document.getElementById(initialTab).style.display = "block";
 });

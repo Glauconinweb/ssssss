@@ -1,4 +1,4 @@
-/* Definição de Variáveis (Ajuste de tons para um visual mais sofisticado) */
+/* Definição de Variáveis */
 :root {
   --color-dark-bg: #121212; /* Fundo mais escuro */
   --color-card-bg: #1e1e1e; /* Fundo dos elementos (cards) */
@@ -11,36 +11,26 @@
 
 /* Tipografia e Fundo */
 body {
-  font-family: "Poppins", sans-serif; /* Fonte profissional (usar fallback) */
+  font-family: "Poppins", sans-serif;
+  /* Fundo aplicado ao BODY - Visível na tela */
   background: url(../imagem/f.s.jorlan.jpg);
   background-size: cover;
+  background-attachment: fixed;
   color: var(--color-text-light);
   margin: 0;
   padding: 0;
   line-height: 1.6;
 }
 
-/* AJUSTE para Forçar a Visualização de Todas as Abas no PDF */
-.tab-content {
-  /* Garante que o CSS normal de 'display: none' seja ignorado para as abas inativas
-       quando o JS as força a 'display: block' */
-  page-break-after: always; /* Cada treino em uma página separada (opcional) */
+/* NOVIDADE: REGRA GLOBAL PARA REMOVER QUADRADOS AZUIS E USAR SHADOW LARANJA PARA FOCO */
+button:focus,
+input:focus,
+textarea:focus,
+.tab-button:focus {
+  outline: none !important; /* Remove o outline azul padrão */
+  box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.5) !important; /* Adiciona uma sombra laranja suave */
 }
 
-/* Remove botões e barras de rolagem que podem aparecer na impressão, mas não na tela */
-@media print {
-  #gerar-pdf-btn,
-  #gerar-planilha-btn,
-  .add-exercicio-btn,
-  .tabs {
-    display: none !important;
-  }
-
-  /* Garante que os containers não tenham cortes feios */
-  .exercicio-item {
-    page-break-inside: avoid;
-  }
-}
 /* Cabeçalho */
 header {
   background-color: var(--color-highlight);
@@ -96,7 +86,7 @@ h2 {
   font-weight: 500;
   color: var(--color-text-light);
   margin-bottom: 5px;
-  display: block; /* Garante que labels se ajustem bem */
+  display: block;
 }
 
 #ficha-info input {
@@ -111,14 +101,14 @@ h2 {
 
 #ficha-info input:focus {
   border-color: var(--color-highlight);
-  outline: none;
+  /* O outline:none está na regra global */
 }
 
 /* Abas (Divisão de Treino) */
 .tabs {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 0; /* Remove a margem inferior para grudar no conteúdo */
+  margin-bottom: 0;
 }
 
 .tab-button {
@@ -150,9 +140,9 @@ h2 {
 .tab-content {
   background-color: var(--color-card-bg);
   padding: 30px;
-  border-radius: 0 0 10px 10px; /* Borda arredondada apenas embaixo */
+  border-radius: 0 0 10px 10px;
   border: 1px solid var(--color-border-subtle);
-  border-top: none; /* Remove a borda superior para se juntar à aba */
+  border-top: none;
   display: none;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
@@ -205,18 +195,15 @@ h2 {
   padding: 12px 20px;
   cursor: pointer;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   font-weight: 700;
   transition: background-color 0.3s, transform 0.1s;
-  border-radius: 10px;
 }
 
 .add-exercicio-btn {
-  @extend .btn; /* Estilo base */
   background-color: var(--color-highlight);
   color: var(--color-dark-bg);
   margin-top: 20px;
-  border-radius: 10px;
 }
 
 .add-exercicio-btn:hover {
@@ -225,7 +212,6 @@ h2 {
 }
 
 .remover-exercicio-btn {
-  @extend .btn; /* Estilo base */
   background-color: var(--color-danger);
   color: var(--color-text-light);
   font-weight: 500;
@@ -243,12 +229,12 @@ h2 {
 }
 
 #gerar-planilha-btn {
-  @extend .btn; /* Estilo base */
+  /* NOVIDADE: Troca de #007bff para o Laranja para combinar com o tema */
   display: block;
   padding: 10px;
   width: 100%;
-  background-color: #007bff; /* Azul Profissional para Ação Final */
-  color: var(--color-text-light);
+  background-color: var(--color-highlight);
+  color: var(--color-dark-bg); /* Texto escuro no botão laranja */
   margin-top: 40px;
   margin-bottom: 50px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
@@ -256,16 +242,90 @@ h2 {
 }
 
 #gerar-planilha-btn:hover {
-  background-color: #0069d9;
+  background-color: var(
+    --color-highlight-hover
+  ); /* Mantém o hover com o laranja mais escuro */
   transform: translateY(-1px);
   transition: 0.4s;
 }
 
 /* =======================================================
-   MEDIA QUERIES - MANUTENÇÃO DA RESPONSIVIDADE (CRUCIAL)
-   ======================================================= */
+   REGRAS DE IMPRESSÃO (PDF) - Garante CSS no PDF
+   ======================================================= */
+
+/* Garante que os containers internos fiquem claros para impressão */
+#ficha-info,
+.tab-content {
+  background-color: white !important;
+  border-color: #ccc !important;
+  box-shadow: none !important;
+}
+
+#ficha-info label,
+#ficha-info input,
+.tab-content label {
+  color: black !important;
+}
+#ficha-info input,
+.exercicio-item input {
+  background-color: white !important;
+  border: 1px solid #ddd !important;
+}
+
+/* Estilo do Exercício no PDF (Fundo claro e texto escuro) */
+.exercicio-item {
+  background-color: #f7f7f7 !important;
+  color: black !important;
+  border-left: 5px solid var(--color-highlight) !important;
+}
+.exercicio-item h4 {
+  color: var(--color-highlight) !important;
+  border-bottom: 1px solid #ccc !important;
+}
+
+h2 {
+  color: var(--color-highlight) !important;
+}
+
+/* AJUSTE para Forçar a Visualização de Todas as Abas no PDF */
+.tab-content {
+  page-break-after: always;
+  border-top: 1px solid var(--color-border-subtle) !important;
+}
+
+/* Remove a imagem de fundo do BODY na impressão para economizar tinta e garantir legibilidade */
+@media print {
+  /* Esconde botões de controle e abas na impressão */
+  #gerar-planilha-btn,
+  .add-exercicio-btn,
+  .tabs,
+  .remover-exercicio-btn {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact; /* Força cores de fundo e texto no PDF */
+    color: black !important;
+    min-width: auto;
+  }
+
+  /* Garante que os containers não tenham cortes feios */
+  .exercicio-item {
+    page-break-inside: avoid;
+  }
+
+  header {
+    background-color: var(--color-highlight) !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+}
+
+/* =======================================================
+   MEDIA QUERIES - MANUTENÇÃO DA RESPONSIVIDADE (CRUCIAL)
+   ======================================================= */
 @media (max-width: 768px) {
-  /* Ajustes gerais para telas médias/celulares */
   header h1 {
     font-size: 1.8em;
   }
@@ -278,7 +338,6 @@ h2 {
   .tab-content {
     padding: 20px;
   }
-
   .remover-exercicio-btn {
     top: 15px;
     right: 15px;
@@ -295,13 +354,10 @@ h2 {
     flex-direction: column;
     gap: 15px;
   }
-
-  /* Garante que os filhos diretos ocupem 100% da largura em mobile */
   #ficha-info > * {
     width: 100%;
     box-sizing: border-box;
   }
-
   #ficha-info input {
     width: 100%;
   }
@@ -310,7 +366,6 @@ h2 {
   .tabs {
     flex-direction: column;
   }
-
   .tab-button {
     width: 100%;
     margin-right: 0;
@@ -326,7 +381,6 @@ h2 {
     box-sizing: border-box;
     float: none;
   }
-
   .exercicio-item h4 {
     margin-right: 0;
   }
