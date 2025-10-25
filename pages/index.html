@@ -3,24 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Protótipo - Criador de Treino Personalizado</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Jorlan de Araujo</title>
+    <link rel="icon" type="image/png" href="/imagem/jjj.jpg" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <header>
-      <h1>J.A. Treinamentos Personalizados</h1>
-      <p>Plataforma Automatizada de Fichas</p>
+      <h1>Jorlan de Araújo</h1>
+      <p>Plataforma Automatizada de Fichas de Treino</p>
     </header>
 
     <div class="container">
       <div id="ficha-info">
         <label for="aluno">Aluno:</label>
-        <input type="text" id="aluno" value="Nome do aluno" />
+        <input type="text" id="aluno" placeholder="Nome do Aluno" />
         <label for="objetivo">Objetivo:</label>
-        <input type="text" id="objetivo" value="Hipertrofia - Avançado" />
+        <input type="text" id="objetivo" placeholder="Hipertrofia" />
       </div>
 
-      <h2>Divisão de Treino (A/B/C)</h2>
+      <h2 id="a">Divisão de Treino</h2>
 
       <div class="tabs">
         <button class="tab-button active" data-tab="tab-a">
@@ -63,6 +70,6 @@
       </button>
     </div>
 
-    <script src="script.js"></script>
+    <script src="/controlls/script.js"></script>
   </body>
 </html>
