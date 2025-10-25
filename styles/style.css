@@ -21,7 +21,7 @@
 body {
   font-family: "Poppins", sans-serif; /* Fonte profissional (usar fallback) */
 
-  background: url(../imagem/f.s.jorlan.jpg);
+  background: url(./imagem/f.s.jorlan.jpg);
   background-attachment: fixed;
   background-size: cover;
 
